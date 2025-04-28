@@ -15,6 +15,7 @@ bool isTransparent(RGB* color);
 void renderTest();
 void renderCubeTest();
 void DDA(int x0, int y0, int x1, int y1,RGB* c);
+void convertToScreenCoordinate(Triangle* triProjected);
 void DrawTriangle(vec3 p1, vec3 p2, vec3 p3);
 
 #endif

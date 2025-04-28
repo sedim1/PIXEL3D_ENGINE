@@ -71,7 +71,7 @@ void renderCubeTest(){
 	MeshCube cube = CubePrimitive();
 	glm_perspective(degToRad(FOV),ASPECT,ZNEAR,ZFAR,projection); float theta = 80.0f * (float)(SDL_GetTicks()/1000.0f);
 	mat4 matRotZ, matRotX, matTranslated; glm_mat4_identity(matRotZ); glm_mat4_identity(matRotX); glm_mat4_identity(matTranslated);
-	vec3 translate; translate[0] = 0.0f; translate[1] = 0.0f; translate[2] = -3.0f;
+	vec3 translate; translate[0] = 0.0f; translate[1] = 0.0f; translate[2] = 3.0f;
 	vec3 xAxis; xAxis[0] = 1.0f; xAxis[1] = 0.0f; xAxis[2] = 0.0f;
 	vec3 zAxis; zAxis[0] = 0.0f; zAxis[1] = 0.0f; zAxis[2] = 1.0f;
 	mat4 mvp; glm_mat4_identity(mvp);
@@ -79,22 +79,27 @@ void renderCubeTest(){
 	glm_mat4_mulN((mat4 *[]){&projection,&matTranslated,&matRotX,&matRotZ},4,mvp);
 	for(int i = 0; i < 12; i++){
 		Triangle triProjected;
-
+			//Multiply each vertex of the current triangle to projected it
 		MultiplyMatrixVector(cube.triangles[i].p[0],triProjected.p[0],mvp);
 		MultiplyMatrixVector(cube.triangles[i].p[1],triProjected.p[1],mvp);
 		MultiplyMatrixVector(cube.triangles[i].p[2],triProjected.p[2],mvp);
-
-		//Scale into view - normalize
-		triProjected.p[0][0] += 1.0f; triProjected.p[0][1] += 1.0f;
-		triProjected.p[1][0] += 1.0f; triProjected.p[1][1] += 1.0f;
-		triProjected.p[2][0] += 1.0f; triProjected.p[2][1] += 1.0f;
-		// adjust into screen space
-		triProjected.p[0][0] *= 0.5f * (float)SW;
-		triProjected.p[0][1] *= 0.5f * (float)SH;
-		triProjected.p[1][0] *= 0.5f * (float)SW;
-		triProjected.p[1][1] *= 0.5f * (float)SH;
-		triProjected.p[2][0] *= 0.5f * (float)SW;
-		triProjected.p[2][1] *= 0.5f * (float)SH;
+		//Convert To Screen Coordinates the current triangle
+		convertToScreenCoordinate(&triProjected);
 		DrawTriangle(triProjected.p[0],triProjected.p[1],triProjected.p[2]);
 	}
+}
+
+void convertToScreenCoordinate(Triangle* triProjected){
+	//Scale into view
+	//Scale into view - normalize
+	triProjected->p[0][0] += 1.0f; triProjected->p[0][1] += 1.0f;
+	triProjected->p[1][0] += 1.0f; triProjected->p[1][1] += 1.0f;
+	triProjected->p[2][0] += 1.0f; triProjected->p[2][1] += 1.0f;
+	// adjust into screen space
+	triProjected->p[0][0] *= 0.5f * (float)SW;
+	triProjected->p[0][1] *= 0.5f * (float)SH;
+	triProjected->p[1][0] *= 0.5f * (float)SW;
+	triProjected->p[1][1] *= 0.5f * (float)SH;
+	triProjected->p[2][0] *= 0.5f * (float)SW;
+	triProjected->p[2][1] *= 0.5f * (float)SH;
 }

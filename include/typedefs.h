@@ -7,8 +7,8 @@
 #include <stdlib.h>
 
 #define RESOLUTION 1
-#define SW 256*RESOLUTION
-#define SH 224*RESOLUTION
+#define SW 180*RESOLUTION
+#define SH 160*RESOLUTION
 #define SW2 (SW/2)
 #define SH2 (SH/2)
 #define PIXELSCALE 4/RESOLUTION
@@ -17,8 +17,8 @@
 
 #define ZNEAR 0.1f
 #define ZFAR 1000.0f
-#define ASPECT ((float)SW/(float)SH)
-#define FOV 75.0f
+#define ASPECT ((float)SH/(float)SW)
+#define FOV 60.0f
 
 #define M_PI 3.14159265358979323846
 
